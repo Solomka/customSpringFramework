@@ -1,8 +1,7 @@
 package ua.rd.ioc;
 
 public interface Config {
+	BeanDefinition[] EMPTY_BEAN_DEFINITION = new BeanDefinition[0];
 
-    BeanDefinition[] EMPTY_BEANDEFINITION = new BeanDefinition[0];
-
-    BeanDefinition[] beanDefinitions();
+	BeanDefinition[] beanDefinitions();
 }

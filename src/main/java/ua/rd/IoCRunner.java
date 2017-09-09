@@ -1,8 +1,8 @@
 package ua.rd;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class IoCRunner {
 
+	public static void main(String[] args) {
+
+	}
 }

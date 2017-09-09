@@ -1,6 +1,7 @@
 package ua.rd.ioc;
 
 public interface BeanDefinition {
-    String getBeanName();
-    Class<?> getBeanType();
+	String getBeanName();
+
+	Class<?> getBeanType();
 }
