@@ -4,31 +4,24 @@ import java.util.Map;
 
 public class JavaMapConfig implements Config {
 
-	private Map<String, Class<?>> beanDescriptions;
+    private Map<String, Map<String, Object>> beanDescriptions;
 
-	public JavaMapConfig(Map<String, Class<?>> beanDescriptions) {
-		this.beanDescriptions = beanDescriptions;
-	}
+    public JavaMapConfig(Map<String, Map<String, Object>> beanDescriptions) {
+        this.beanDescriptions = beanDescriptions;
+    }
 
-	private BeanDefinition beanDefinition(String name, Class<?> type) {
-		return new BeanDefinition() {
-			@Override
-			public String getBeanName() {
-				return name;
-			}
+    private BeanDefinition beanDefinition(Map.Entry<String, Map<String, Object>> descriptionEntry) {
+        return new SimpleBeanDefinition(descriptionEntry.getKey(), (Class<?>) descriptionEntry.getValue().get("type"),
+                (boolean) descriptionEntry.getValue().getOrDefault("isPrototype", false));
 
-			@Override
-			public Class<?> getBeanType() {
-				return type;
-			}
-		};
-	}
+    }
 
-	@Override
-	public BeanDefinition[] beanDefinitions() {
-		BeanDefinition[] beanDefinitions = beanDescriptions.entrySet().stream()
-				.map(entry -> beanDefinition(entry.getKey(), entry.getValue())).toArray(BeanDefinition[]::new);
+    @Override
+    public BeanDefinition[] beanDefinitions() {
+        BeanDefinition[] beanDefinitions =
+                beanDescriptions.entrySet().stream()
+                        .map(this::beanDefinition).toArray(BeanDefinition[]::new);
 
-		return beanDefinitions;
-	}
+        return beanDefinitions;
+    }
 }
