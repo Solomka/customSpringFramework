@@ -185,7 +185,7 @@ public class ApplicationContextTest {
                     put("testBean",
                             new HashMap<String, Object>() {{
                                 put("type", TestBean.class);
-                                put("isPrototype", false);
+                                put("isPrototype", true);
                             }}
                     );
                     put("testBeanWithConstructor",
@@ -246,7 +246,7 @@ public class ApplicationContextTest {
                     put("testBeanWithConstructorTwoParams",
                             new HashMap<String, Object>() {{
                                 put("type", TestBeanWithConstructorTwoParams.class);
-                                put("isPrototype", true);
+                                put("isPrototype", false);
                             }}
                     );
                 }};
