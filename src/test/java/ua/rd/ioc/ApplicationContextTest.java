@@ -260,9 +260,71 @@ public class ApplicationContextTest {
         assertNotSame(bean.testBean1, bean.testBean2);
     }
 
+    @Test
+    public void getBeanCallInitMethod() throws Exception {
+        Map<String, Map<String, Object>> beanDescriptions =
+                new HashMap<String, Map<String, Object>>() {{
+                    put("testBean",
+                            new HashMap<String, Object>() {{
+                                put("type", TestBean.class);
+                                put("isPrototype", true);
+                            }}
+                    );
+                }};
+
+        Config config = new JavaMapConfig(beanDescriptions);
+        Context context = new ApplicationContext(config);
+
+        TestBean bean
+                = (TestBean) context.getBean("testBean");
+
+        assertEquals("initialized", bean.initValue);
+    }
+
+    @Test
+    public void getBeanCallPostConstructAnnotatedMethod() throws Exception {
+        Map<String, Map<String, Object>> beanDescriptions =
+                new HashMap<String, Map<String, Object>>() {{
+                    put("testBean",
+                            new HashMap<String, Object>() {{
+                                put("type", TestBean.class);
+                                put("isPrototype", true);
+                            }}
+                    );
+                }};
+
+        Config config = new JavaMapConfig(beanDescriptions);
+        Context context = new ApplicationContext(config);
+
+        TestBean bean
+                = (TestBean) context.getBean("testBean");
+
+        assertEquals("initializedByPostConstruct", bean.postConstructValue);
+    }
+
 
     static class TestBean {
 
+        public String initValue;
+        public String postConstructValue;
+
+
+        //call method dynamically by name
+        public void init() {
+            initValue = "initialized";
+        }
+
+        //call method dynamically by @MyPostConstruct annotation presence
+        @MyPostConstruct
+        public void postConstruct() {
+            postConstructValue = "initializedByPostConstruct";
+        }
+
+        @Benchmark
+        public String methodToBenchmark(String str) {
+            //reversed String
+            return str;
+        }
     }
 
     static class TestBeanWithConstructor {
