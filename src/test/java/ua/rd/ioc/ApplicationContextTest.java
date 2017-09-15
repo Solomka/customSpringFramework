@@ -1,5 +1,6 @@
 package ua.rd.ioc;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +51,11 @@ public class ApplicationContextTest {
         Class<TestBean> beanType = TestBean.class;
         Map<String, Map<String, Object>> beanDescriptions = new HashMap<String, Map<String, Object>>() {
             {
-                put(beanName, new HashMap<>());
+                put(beanName, new HashMap<String, Object>() {
+                    {
+                        put("type", beanType);
+                    }
+                });
             }
         };
         Config config = new JavaMapConfig(beanDescriptions);
@@ -67,10 +72,19 @@ public class ApplicationContextTest {
     public void getBeanDefinitionNamesWithSeveralBeanDefinitions() throws Exception {
         String beanName1 = "FirstBean";
         String beanName2 = "SecondBean";
+        Class<TestBean> beanType = TestBean.class;
         Map<String, Map<String, Object>> beanDescriptions = new HashMap<String, Map<String, Object>>() {
             {
-                put(beanName1, new HashMap<>());
-                put(beanName2, new HashMap<>());
+                put(beanName1, new HashMap<String, Object>() {
+                    {
+                        put("type", beanType);
+                    }
+                });
+                put(beanName2, new HashMap<String, Object>() {
+                    {
+                        put("type", beanType);
+                    }
+                });
             }
         };
         Config config = new JavaMapConfig(beanDescriptions);
@@ -308,8 +322,8 @@ public class ApplicationContextTest {
                 new HashMap<String, Map<String, Object>>() {{
                     put("testBean",
                             new HashMap<String, Object>() {{
-                                put("type", TestBean.class);
-                                put("isPrototype", true);
+                                put("type", ProxiedTestBean.class);
+                                put("isPrototype", false);
                             }}
                     );
                 }};
@@ -320,9 +334,27 @@ public class ApplicationContextTest {
         ITestBean bean
                 = (ITestBean) context.getBean("testBean");
 
-        bean.methodToBenchmark("azazazazaazza");
+        System.out.println("Result: " + bean.methodToBenchmark("System.out"));
     }
 
+    static class TestBean {
+
+        public String initValue;
+        public String postConstructValue;
+
+
+        //call method dynamically by name
+        public void init() {
+            initValue = "initialized";
+        }
+
+        //call method dynamically by @MyPostConstruct annotation presence
+        @MyPostConstruct
+        public void postConstruct() {
+            postConstructValue = "initializedByPostConstruct";
+        }
+
+    }
 
     static class TestBeanWithConstructor {
         private final TestBean testBean;
@@ -333,13 +365,12 @@ public class ApplicationContextTest {
     }
 
     static class TestBeanWithConstructorTwoParams {
+        public final TestBean testBean1;
+        public final TestBean testBean2;
+
         public TestBeanWithConstructorTwoParams(TestBean testBean1, TestBean testBean2) {
             this.testBean1 = testBean1;
             this.testBean2 = testBean2;
         }
-
-        public final TestBean testBean1;
-        public final TestBean testBean2;
     }
-
 }

@@ -32,6 +32,7 @@ public class ApplicationContext implements Context {
 
 
     public Object getBean(String beanName) {
+
         BeanDefinition beanDefinition = getBeanDefinitionByName(beanName);
         Object bean = beans.get(beanName);
         if (bean != null) {
@@ -149,19 +150,42 @@ public class ApplicationContext implements Context {
         }
 
         private void createBenchmarkProxy() {
-            System.out.println("Called");
             Class<?> beanClass = bean.getClass();
-            /*bean = Proxy.newProxyInstance(beanClass.getClassLoader(),
+            Object oldBean = bean;
+
+            if (Arrays.stream(beanClass.getMethods()).filter(m -> m.isAnnotationPresent(Benchmark.class)).count() > 0) {
+
+                bean = generateProxy(beanClass, oldBean);
+            }
+        }
+
+        private Object generateProxy(Class<?> beanClass, Object oldBean) {
+            return Proxy.newProxyInstance(beanClass.getClassLoader(),
                     beanClass.getInterfaces(), (Object proxy, Method method, Object[] args) -> {
-                        System.out.println("Fooooooooo");
-                        if (method.isAnnotationPresent(Benchmark.class)) {
-                            return methodInvocationWithExecutionTimeNoted(method, args);
+
+                        if (Arrays.stream(beanClass.getMethods()).filter(m -> m.getName().equals(method.getName())).findAny().filter(m -> m.isAnnotationPresent(Benchmark.class)).isPresent()) {
+                            return methodInvocationWithExecutionTimeNoted(oldBean, method, args);
                         } else {
-                            return method.invoke(bean, args);
+                            return method.invoke(oldBean, args);
                         }
-                    });*/
-            bean = Proxy.newProxyInstance(beanClass.getClassLoader(),  beanClass.getInterfaces(),
-                    new ClassProxyHandler());
+                    });
+        }
+
+        private Object methodInvocationWithExecutionTimeNoted(Object newBean, Method method, Object[] args) {
+            Object objectAnnotatedMethodExecutionResult;
+            long startTime = System.nanoTime();
+
+            try {
+                objectAnnotatedMethodExecutionResult = method.invoke(newBean, args);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+
+            long stopTime = System.nanoTime();
+            long elapsedTimeInSeconds = (stopTime - startTime);
+
+            System.out.println("Method execution time: " + elapsedTimeInSeconds);
+            return objectAnnotatedMethodExecutionResult;
         }
 
 
