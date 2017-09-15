@@ -302,30 +302,27 @@ public class ApplicationContextTest {
         assertEquals("initializedByPostConstruct", bean.postConstructValue);
     }
 
+    @Test
+    public void getBeanMethodToBenchmarkMethod() throws Exception {
+        Map<String, Map<String, Object>> beanDescriptions =
+                new HashMap<String, Map<String, Object>>() {{
+                    put("testBean",
+                            new HashMap<String, Object>() {{
+                                put("type", TestBean.class);
+                                put("isPrototype", true);
+                            }}
+                    );
+                }};
 
-    static class TestBean {
+        Config config = new JavaMapConfig(beanDescriptions);
+        Context context = new ApplicationContext(config);
 
-        public String initValue;
-        public String postConstructValue;
+        ITestBean bean
+                = (ITestBean) context.getBean("testBean");
 
-
-        //call method dynamically by name
-        public void init() {
-            initValue = "initialized";
-        }
-
-        //call method dynamically by @MyPostConstruct annotation presence
-        @MyPostConstruct
-        public void postConstruct() {
-            postConstructValue = "initializedByPostConstruct";
-        }
-
-        @Benchmark
-        public String methodToBenchmark(String str) {
-            //reversed String
-            return str;
-        }
+        bean.methodToBenchmark("azazazazaazza");
     }
+
 
     static class TestBeanWithConstructor {
         private final TestBean testBean;

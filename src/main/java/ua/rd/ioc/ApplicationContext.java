@@ -1,7 +1,11 @@
 package ua.rd.ioc;
 
 import java.beans.Introspector;
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.time.Clock;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,7 +50,7 @@ public class ApplicationContext implements Context {
 
         beanBuilder.callInitMethod();
         beanBuilder.callPostConstructAnnotatedMethod();
-        //beanBuilder.createBenchmarkProxy();
+        beanBuilder.createBenchmarkProxy();
 
         Object bean = beanBuilder.build();
 
@@ -144,17 +148,22 @@ public class ApplicationContext implements Context {
                     });
         }
 
-        private void createBrenchmarkProxy() {
+        private void createBenchmarkProxy() {
+            System.out.println("Called");
             Class<?> beanClass = bean.getClass();
-            bean = Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(),
-                    beanClass.getInterfaces(),
-                    new InvocationHandler() {
-                        @Override
-                        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            /*bean = Proxy.newProxyInstance(beanClass.getClassLoader(),
+                    beanClass.getInterfaces(), (Object proxy, Method method, Object[] args) -> {
+                        System.out.println("Fooooooooo");
+                        if (method.isAnnotationPresent(Benchmark.class)) {
+                            return methodInvocationWithExecutionTimeNoted(method, args);
+                        } else {
                             return method.invoke(bean, args);
                         }
-                    });
+                    });*/
+            bean = Proxy.newProxyInstance(beanClass.getClassLoader(),  beanClass.getInterfaces(),
+                    new ClassProxyHandler());
         }
+
 
         public Object build() {
             return bean;
