@@ -11,7 +11,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spring.version>3.2.13.RELEASE</spring.version>
+        <springframework.version>4.3.9.RELEASE</springframework.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -20,13 +20,8 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
+            <artifactId>spring-context-support</artifactId>
+            <version>${springframework.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

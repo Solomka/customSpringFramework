@@ -21,7 +21,7 @@ public class IoCRunner {
                     put("tweetRepository",
                             new HashMap<String, Object>() {{
                                 put("type", InMemoryTweetRepository.class);
-                                put("isPrototype", false);
+                                put("isPrototype", true);
                             }}
                     );
                     put("tweetService",
@@ -40,6 +40,10 @@ public class IoCRunner {
 
         System.out.println(tweetRepository.allTweets());
         System.out.println(tweetService.allTweets());
+
+        System.out.println(
+                tweetService.getRepository() == tweetService.getRepository()
+        );
 
     }
 }
