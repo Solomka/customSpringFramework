@@ -1,6 +1,5 @@
 package ua.rd.ioc;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 

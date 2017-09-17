@@ -3,7 +3,9 @@ package ua.rd.ioc;
 /**
  * Created by Solomiya_Yaremko on 9/15/2017.
  */
-public class ProxiedTestBean implements ITestBean {
+
+
+class ProxiedTestBean implements ITestBean {
 
     @Override
     @Benchmark

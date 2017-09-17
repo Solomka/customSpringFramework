@@ -1,6 +1,6 @@
 package ua.rd.ioc;
 
-public interface ITestBean {
+interface ITestBean {
     String methodToBenchmark(String str);
 }
 

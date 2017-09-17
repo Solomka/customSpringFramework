@@ -32,8 +32,12 @@ public class ApplicationContext implements Context {
 
 
     public Object getBean(String beanName) {
+        //Optional or empty Optional
         return Optional.ofNullable(beans.get(beanName))
-                .orElseGet(() -> createBeanByBeanDefinition(getBeanDefinitionByName(beanName)));
+                //Return the value if present, otherwise invoke other and return the result of that invocation.
+                .orElseGet(() ->
+                        createBeanByBeanDefinition(getBeanDefinitionByName(beanName))
+                );
 
     }
 
@@ -58,7 +62,6 @@ public class ApplicationContext implements Context {
 
         return bean;
     }
-
 
     private BeanDefinition getBeanDefinitionByName(String beanName) {
         return beanDefinitions.stream()
@@ -152,22 +155,25 @@ public class ApplicationContext implements Context {
 
         private void createBenchmarkProxy() {
             Class<?> beanClass = bean.getClass();
-            Object oldBean = bean;
+            Object originalBean = bean;
 
-            if (Arrays.stream(beanClass.getMethods()).filter(m -> m.isAnnotationPresent(Benchmark.class)).count() > 0) {
-
-                bean = generateProxy(beanClass, oldBean);
+            if (isBenchmarkAnnotatedMethodPresent(beanClass)) {
+                bean = generateProxy(beanClass, originalBean);
             }
         }
 
-        private Object generateProxy(Class<?> beanClass, Object oldBean) {
+        private boolean isBenchmarkAnnotatedMethodPresent(Class<?> beanClass) {
+            return Arrays.stream(beanClass.getMethods()).filter(m -> m.isAnnotationPresent(Benchmark.class)).findAny().isPresent();
+        }
+
+        private Object generateProxy(Class<?> beanClass, Object originalBean) {
             return Proxy.newProxyInstance(beanClass.getClassLoader(),
                     beanClass.getInterfaces(), (Object proxy, Method method, Object[] args) -> {
-
-                        if (Arrays.stream(beanClass.getMethods()).filter(m -> m.getName().equals(method.getName())).findAny().filter(m -> m.isAnnotationPresent(Benchmark.class)).isPresent()) {
-                            return methodInvocationWithExecutionTimeNoted(oldBean, method, args);
+                        //if (Arrays.stream(beanClass.getMethods()).filter(m -> m.getName().equals(method.getName())).findAny().filter(m -> m.isAnnotationPresent(Benchmark.class)).isPresent()) {
+                        if (beanClass.getMethod(method.getName(), method.getParameterTypes()).isAnnotationPresent(Benchmark.class)) {
+                            return methodInvocationWithExecutionTimeNoted(originalBean, method, args);
                         } else {
-                            return method.invoke(oldBean, args);
+                            return method.invoke(originalBean, args);
                         }
                     });
         }
@@ -194,4 +200,6 @@ public class ApplicationContext implements Context {
             return bean;
         }
     }
+
+
 }
