@@ -24,6 +24,14 @@ public class IoCRunner {
                                 put("isPrototype", true);
                             }}
                     );
+                    //prototype
+                    put("tweet",
+                            new HashMap<String, Object>() {{
+                                put("type", Tweet.class);
+                                put("isPrototype", true);
+                            }}
+                    );
+                    //singleton
                     put("tweetService",
                             new HashMap<String, Object>() {{
                                 put("type", SimpleTweetService.class);
@@ -42,8 +50,12 @@ public class IoCRunner {
         System.out.println(tweetService.allTweets());
 
         System.out.println(
-                tweetService.getRepository() == tweetService.getRepository()
+                tweetService.newTweet() == tweetService.newTweet()
         );
+
+        /*System.out.println(
+                tweetService.getRepository() == tweetService.getRepository()
+        );*/
 
     }
 }
