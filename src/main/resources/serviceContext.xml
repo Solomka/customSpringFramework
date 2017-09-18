@@ -4,13 +4,66 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean name="tweetService" class="ua.rd.service.SimpleTweetService" scope="prototype">
+    <!-- <bean name="tweetService" class="ua.rd.service.SimpleTweetService" scope="prototype">
+         <constructor-arg ref="tweetRepository"/>
+         <property name="tweet" ref="tweet"/>
+     </bean>-->
+
+    <!--firstly tweetService instance is created AND then  setTweet is called-->
+    <bean name="tweetService" class="ua.rd.service.SimpleTweetService">
         <constructor-arg ref="tweetRepository"/>
         <property name="tweet" ref="tweet"/>
     </bean>
 
-    <bean name="tweet" class="ua.rd.domain.Tweet" scope="prototype"/>
+    <!--<bean name="tweet" class="ua.rd.domain.Tweet" scope="prototype"/>-->
 
-    <bean name="tweetParent" parent="tweet"/>
+    <!--we do not know the type of the newTweet return statement-->
+    <!--just for static methods-->
+    <!--<bean name="tweet" class="ua.rd.service.SimpleTweetService" factory-method="newTweet"/>-->
+
+    <bean name="tweet" factory-bean="tweetService" factory-method="newTweet" scope="prototype"/>
+
+    <!--  add args to factory-method-->
+    <!--<bean name="tweet" factory-bean="tweetService" factory-method="newTweet" scope="prototype">
+        <constructor-arg ref="tweetRepository"/>
+        <constructor-arg ref="tweetRepository"/>
+    </bean>-->
+
+    <!--cyclic dependencies-->
+    <!-- 1 -->
+    <!--<bean name="tw" class="ua.rd.domain.Tweet" lazy-init="true">
+        <constructor-arg value="Bla"/>
+        <constructor-arg ref="us"/>
+    </bean>
+
+    <bean name="us" class="ua.rd.domain.User" lazy-init="true">
+        <constructor-arg ref="tw"/>
+    </bean>
+-->
+    <!-- 2 -->
+   <!-- <bean name="tw" class="ua.rd.domain.Tweet" lazy-init="true">
+        <constructor-arg type="java.lang.String" value="Tweet"/>
+        <constructor-arg>
+            <null/>
+        </constructor-arg>
+    </bean>
+
+    <bean name="us" class="ua.rd.domain.User" lazy-init="true">
+        <constructor-arg ref="tw"/>
+    </bean>-->
+
+    <!-- 3 -->
+   <bean name="tw" class="ua.rd.domain.Tweet" >
+       <!--  <constructor-arg value="Bla"/>-->
+      <!--  <constructor-arg ref="us"/>-->
+       <property name="user" ref="us"/>
+    </bean>
+
+    <bean name="us" class="ua.rd.domain.User" depends-on="tw">
+        <constructor-arg ref="tw"/>
+    </bean>
+
+    <!--parent bean task-->
+    <!-- <bean name="tweetParent" parent="tweet"/>-->
     <!-- <alias name="tweet" alias="tweetParent"/>-->
 </beans>

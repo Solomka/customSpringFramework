@@ -9,7 +9,7 @@ public class Tweet {
     public Tweet() {
     }
 
-   /* public Tweet(String txt, User user) {
+    public Tweet(String txt, User user) {
         this.txt = txt;
         this.user = user;
     }
@@ -18,7 +18,7 @@ public class Tweet {
         this.tweetId = tweetId;
         this.txt = txt;
         this.user = user;
-    }*/
+    }
 
     public Long getTweetId() {
         return tweetId;

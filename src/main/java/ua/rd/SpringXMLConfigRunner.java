@@ -3,6 +3,7 @@ package ua.rd;
 import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import ua.rd.domain.Tweet;
 import ua.rd.service.TweetService;
 
 import java.util.Arrays;
@@ -25,6 +26,7 @@ public class SpringXMLConfigRunner {
                 tweetService.newTweet() == tweetService.newTweet()
         );
 
+        Tweet tweet = (Tweet) serviceContext.getBean("tw");
         serviceContext.close();
         repoContext.close();
 

@@ -57,4 +57,9 @@ public class SimpleTweetService implements TweetService {
     public Tweet newTweet() {
         return tweet;
     }
+/*
+    @Override
+    public static Tweet newTweet() {
+        return tweet;
+    }*/
 }
