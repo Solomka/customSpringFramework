@@ -4,24 +4,24 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- <bean name="tweetService" class="ua.rd.service.SimpleTweetService" scope="prototype">
+     <bean name="tweetService" class="ua.rd.service.SimpleTweetService" scope="prototype">
          <constructor-arg ref="tweetRepository"/>
          <property name="tweet" ref="tweet"/>
-     </bean>-->
+     </bean>
 
     <!--firstly tweetService instance is created AND then  setTweet is called-->
-    <bean name="tweetService" class="ua.rd.service.SimpleTweetService">
+   <!-- <bean name="tweetService" class="ua.rd.service.SimpleTweetService">
         <constructor-arg ref="tweetRepository"/>
         <property name="tweet" ref="tweet"/>
-    </bean>
+    </bean>-->
 
-    <!--<bean name="tweet" class="ua.rd.domain.Tweet" scope="prototype"/>-->
+    <bean name="tweet" class="ua.rd.domain.Tweet" scope="prototype"/>
 
     <!--we do not know the type of the newTweet return statement-->
     <!--just for static methods-->
     <!--<bean name="tweet" class="ua.rd.service.SimpleTweetService" factory-method="newTweet"/>-->
 
-    <bean name="tweet" factory-bean="tweetService" factory-method="newTweet" scope="prototype"/>
+   <!-- <bean name="tweet" factory-bean="tweetService" factory-method="newTweet" scope="prototype"/>-->
 
     <!--  add args to factory-method-->
     <!--<bean name="tweet" factory-bean="tweetService" factory-method="newTweet" scope="prototype">
@@ -53,15 +53,15 @@
     </bean>-->
 
     <!-- 3 -->
-   <bean name="tw" class="ua.rd.domain.Tweet" >
-       <!--  <constructor-arg value="Bla"/>-->
-      <!--  <constructor-arg ref="us"/>-->
+  <!-- <bean name="tw" class="ua.rd.domain.Tweet" >
+       &lt;!&ndash;  <constructor-arg value="Bla"/>&ndash;&gt;
+      &lt;!&ndash;  <constructor-arg ref="us"/>&ndash;&gt;
        <property name="user" ref="us"/>
     </bean>
 
     <bean name="us" class="ua.rd.domain.User" depends-on="tw">
         <constructor-arg ref="tw"/>
-    </bean>
+    </bean>-->
 
     <!--parent bean task-->
     <!-- <bean name="tweetParent" parent="tweet"/>-->
