@@ -1,5 +1,6 @@
 package ua.rd.service;
 
+import org.springframework.beans.factory.annotation.Lookup;
 import ua.rd.domain.Tweet;
 import ua.rd.repository.TweetRepository;
 
@@ -26,6 +27,7 @@ public class SimpleTweetService implements TweetService {
         return tweetRepository;
     }
 
+    @Lookup
     @Override
     public Tweet newTweet() {
         return tweet;

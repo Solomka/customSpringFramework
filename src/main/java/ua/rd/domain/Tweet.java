@@ -7,6 +7,7 @@ public class Tweet {
     private User user;
 
     public Tweet() {
+        System.out.println("Tweet is instantiated=)");
     }
 
    /* public Tweet(String txt, User user) {

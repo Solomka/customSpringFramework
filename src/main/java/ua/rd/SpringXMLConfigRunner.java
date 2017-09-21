@@ -20,7 +20,7 @@ public class SpringXMLConfigRunner {
         System.out.println(Arrays.toString(serviceContext.getBeanDefinitionNames()));
 
         TweetService tweetService = (TweetService) serviceContext.getBean("tweetService");
-        System.out.println(tweetService.allTweets());
+      //  System.out.println(tweetService.allTweets());
 
         System.out.println(
                 tweetService.newTweet() == tweetService.newTweet()
