@@ -2,10 +2,14 @@ package ua.rd.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 import ua.rd.domain.Tweet;
 import ua.rd.ioc.Benchmark;
 import ua.rd.repository.TweetRepository;
 
+@Service("tweetService")
+@Profile("dev")
 public class SimpleTweetService implements TweetService {
 
     @Autowired
@@ -36,7 +40,7 @@ public class SimpleTweetService implements TweetService {
     }
 
     @Override
-    @Lookup
+    // @Lookup - doesn't work without package scan
     @Benchmark
     public Tweet newTweet() {
         return tweet;

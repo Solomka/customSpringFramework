@@ -11,6 +11,12 @@ public class Tweet {
     public Tweet() {
     }
 
+    public Tweet(String txt, User user) {
+        this.txt = txt;
+        this.user = user;
+    }
+
+
    /* public Tweet(String txt, User user) {
         this.txt = txt;
         this.user = user;
@@ -42,7 +48,7 @@ public class Tweet {
         return user;
     }
 
-    @Value("user")
+    //@Value("user")
     public void setUser(User user) {
         this.user = user;
     }

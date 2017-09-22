@@ -13,6 +13,7 @@
     <bean class="ua.rd.service.BenchmarkPostProcessor"/>
     <bean class="ua.rd.service.TweetBFPP"/>
 
+    <beans profile="dev">
     <bean name="tweetService" class="ua.rd.service.SimpleTweetService" scope="prototype">
         <!--  <constructor-arg ref="tweetRepository"/>
           <property name="tweet" ref="tweet"/>-->
@@ -75,4 +76,5 @@
     <!--parent bean task-->
     <!-- <bean name="tweetParent" parent="tweet"/>-->
     <!-- <alias name="tweet" alias="tweetParent"/>-->
+    </beans>
 </beans>
