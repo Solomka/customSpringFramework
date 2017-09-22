@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation=" http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
 
-     <bean name="tweetService" class="ua.rd.service.SimpleTweetService" scope="prototype">
-         <constructor-arg ref="tweetRepository"/>
-         <property name="tweet" ref="tweet"/>
-     </bean>
+    <context:annotation-config/>
+
+    <bean class="ua.rd.domain.UserFactoryBean"/>
+    <bean class="ua.rd.service.BenchmarkPostProcessor"/>
+    <bean class="ua.rd.service.TweetBFPP"/>
+
+    <bean name="tweetService" class="ua.rd.service.SimpleTweetService" scope="prototype">
+        <!--  <constructor-arg ref="tweetRepository"/>
+          <property name="tweet" ref="tweet"/>-->
+    </bean>
 
     <!--firstly tweetService instance is created AND then  setTweet is called-->
-   <!-- <bean name="tweetService" class="ua.rd.service.SimpleTweetService">
-        <constructor-arg ref="tweetRepository"/>
-        <property name="tweet" ref="tweet"/>
-    </bean>-->
+    <!-- <bean name="tweetService" class="ua.rd.service.SimpleTweetService">
+         <constructor-arg ref="tweetRepository"/>
+         <property name="tweet" ref="tweet"/>
+     </bean>-->
 
     <bean name="tweet" class="ua.rd.domain.Tweet" scope="prototype"/>
 
@@ -21,7 +30,7 @@
     <!--just for static methods-->
     <!--<bean name="tweet" class="ua.rd.service.SimpleTweetService" factory-method="newTweet"/>-->
 
-   <!-- <bean name="tweet" factory-bean="tweetService" factory-method="newTweet" scope="prototype"/>-->
+    <!-- <bean name="tweet" factory-bean="tweetService" factory-method="newTweet" scope="prototype"/>-->
 
     <!--  add args to factory-method-->
     <!--<bean name="tweet" factory-bean="tweetService" factory-method="newTweet" scope="prototype">
@@ -41,27 +50,27 @@
     </bean>
 -->
     <!-- 2 -->
-   <!-- <bean name="tw" class="ua.rd.domain.Tweet" lazy-init="true">
-        <constructor-arg type="java.lang.String" value="Tweet"/>
-        <constructor-arg>
-            <null/>
-        </constructor-arg>
-    </bean>
+    <!-- <bean name="tw" class="ua.rd.domain.Tweet" lazy-init="true">
+         <constructor-arg type="java.lang.String" value="Tweet"/>
+         <constructor-arg>
+             <null/>
+         </constructor-arg>
+     </bean>
 
-    <bean name="us" class="ua.rd.domain.User" lazy-init="true">
-        <constructor-arg ref="tw"/>
-    </bean>-->
+     <bean name="us" class="ua.rd.domain.User" lazy-init="true">
+         <constructor-arg ref="tw"/>
+     </bean>-->
 
     <!-- 3 -->
-  <!-- <bean name="tw" class="ua.rd.domain.Tweet" >
-       &lt;!&ndash;  <constructor-arg value="Bla"/>&ndash;&gt;
-      &lt;!&ndash;  <constructor-arg ref="us"/>&ndash;&gt;
-       <property name="user" ref="us"/>
-    </bean>
+    <!-- <bean name="tw" class="ua.rd.domain.Tweet" >
+         &lt;!&ndash;  <constructor-arg value="Bla"/>&ndash;&gt;
+        &lt;!&ndash;  <constructor-arg ref="us"/>&ndash;&gt;
+         <property name="user" ref="us"/>
+      </bean>
 
-    <bean name="us" class="ua.rd.domain.User" depends-on="tw">
-        <constructor-arg ref="tw"/>
-    </bean>-->
+      <bean name="us" class="ua.rd.domain.User" depends-on="tw">
+          <constructor-arg ref="tw"/>
+      </bean>-->
 
     <!--parent bean task-->
     <!-- <bean name="tweetParent" parent="tweet"/>-->

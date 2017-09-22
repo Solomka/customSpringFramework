@@ -27,6 +27,8 @@ public class SpringXMLConfigRunner {
         );
 
         /*Tweet tweet = (Tweet) serviceContext.getBean("tw");*/
+       // System.out.println(serviceContext.getBean("user"));
+
         serviceContext.close();
         repoContext.close();
 
