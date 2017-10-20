@@ -15,6 +15,7 @@ import java.util.Arrays;
  */
 
 @Configuration
+@ComponentScan("ua.rd")
 public class ServiceConfig {
 
     private final TweetRepository tweetRepository;
