@@ -60,8 +60,8 @@ public class ApplicationContext implements Context {
         beanBuilder.callInitMethod();
         beanBuilder.callPostConstructAnnotatedMethod();
         beanBuilder.createBenchmarkProxy();
-        //substitude proxyTweetService instead of SimpleTweetService
-        //for new prototype bean creation in case of newTweet method call
+        //substitude PrototypeTweetServiceProxy instead of SimpleTweetService object instance
+        //for new prototype bean creation in case of newTweet method call in SimpleTweetService
         /**TODO:
          * rewrite this
          */

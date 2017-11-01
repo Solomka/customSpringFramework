@@ -18,7 +18,6 @@ public class SimpleTweetService implements TweetService {
 
     public SimpleTweetService() {
         tweetRepository = null;
-
     }
 
     public SimpleTweetService(TweetRepository tweetRepository) {
